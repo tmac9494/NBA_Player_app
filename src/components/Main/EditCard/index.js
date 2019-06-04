@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import styles from "./styles";
 import SimpleForm from '../../General/SimpleForm';
+import TeamSelect from '../TeamSelect';
 
 const EditCard = props => {
 
@@ -38,6 +39,13 @@ const EditCard = props => {
 			return null;
 		}
 	}).filter(val => val !== null);
+
+	// team select
+	const handleTeamSelect = e => {
+		let data = formData;
+		data.team = e.target.value;
+		setFormData(data);
+	}
 
 	// form submit
 	const submitHandler = e => {
@@ -107,7 +115,10 @@ const EditCard = props => {
 		        	</div>
 		        }
         		{!saving.saving &&
-		            <SimpleForm handleSubmit={submitHandler} style={{width: "90%", margin: "0 auto"}} inputs={formProperties || []} />
+        			<React.Fragment>
+        				<TeamSelect handleSelect={handleTeamSelect} options={props.teams} default={props.team.id} />
+			            <SimpleForm handleSubmit={submitHandler} style={{width: "90%", margin: "0 auto"}} inputs={formProperties || []} />
+		        	</React.Fragment>
 		        }
         	</div>
         </div>

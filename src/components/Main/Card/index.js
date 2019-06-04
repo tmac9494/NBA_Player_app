@@ -8,7 +8,11 @@ import EditCard from '../EditCard';
 const Card = props => {
 
 	const [edit, setEdit] = useState(false);
-	const team = TeamFetch({id: props.data.team});
+	const teams = TeamFetch();
+    let team = null;
+    if (teams !== null) {
+        team = teams.filter(teami => teami.id === props.data.team)[0];
+    }
 
     return (
         <div style={{ ...styles.container, ...props.style }}>
@@ -18,7 +22,7 @@ const Card = props => {
                 <div>{team !== null && team.name}</div>
                 <Button onClick={() => setEdit(true)}>Edit</Button>
                 {edit &&
-                	<EditCard data={props.data} team={team} closeCard={() => setEdit(false)} />
+                	<EditCard data={props.data} team={team} teams={teams} closeCard={() => setEdit(false)} />
                 }
             </div>
         </div>
