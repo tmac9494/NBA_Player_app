@@ -23,7 +23,7 @@ const Catalog = props => {
 
 
 	return(
-		<div id="catalog">
+		<div id="catalog" style={{margin: "0 auto", maxWidth: "1200px"}}>
 			{catalogData && 
 				<React.Fragment>
 					{catalogData.data.map((player, i) => {

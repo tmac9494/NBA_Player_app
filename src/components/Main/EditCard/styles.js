@@ -8,6 +8,7 @@ export default {
    		background: "rgba(0,0,0,0.4)",
    		maxHeight: "100%",
    		textAlign: "left",
+         zIndex: "2000"
    },
    content: {
 	   	position: "fixed",

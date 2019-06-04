@@ -41,7 +41,7 @@ const Pagination = props => {
 	// create pagination buttons
 	let buttons = [];
 	for (let i = 1;i < pageTotal;i++) {
-		buttons.push(<button className="page-button" key={i} value={i} onClick={props.setPage}>{i}</button>);
+		buttons.push(<button style={styles.pageButton} key={i} value={i} onClick={props.setPage}>{i}</button>);
 	}
 
 

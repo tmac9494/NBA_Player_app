@@ -1,5 +1,6 @@
 import React, {useEffect} from "react";
 import styles from "./styles";
+import Button from "../Button";
 
 // consume array of objects and produce a form consisting of only text and text area inputs
 // [
@@ -12,21 +13,21 @@ import styles from "./styles";
 const SimpleForm = props => {
 
     return (
-        <form onSubmit={props.submitHandler} className="form" style={{ ...styles.container, ...props.style }}>
+        <form onSubmit={props.handleSubmit} className="form" style={{ ...styles.container, ...props.style }}>
             {props.inputs.map((input, i) => {
 
                 return(
                     <label style={styles.label} key={input.property + i}>{input.property}<br/>
                         {input.type == "textarea" ? 
-                            <textarea style={styles.input} /> : 
-                            <input style={styles.input} type="text" />}
+                            <textarea onChange={input.onChange ? input.onChange : false} name={input.property} style={styles.input} /> : 
+                            <input onChange={input.onChange ? input.onChange : false} name={input.property} style={styles.input} type="text" />}
                     </label>
                 );
             
             })
             }
 
-            <input type="submit" style={styles.submit} value={props.submitLabel ? props.submitLabel : "Save"}/>
+            <Button onClick={props.handleSubmit}>{props.submitLabel ? props.submitLabel : "Save"}</Button>
 
         </form>
     );

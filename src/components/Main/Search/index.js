@@ -4,7 +4,7 @@ import styles from "./styles";
 const Search = props => {
     return (
         <div style={{ ...styles.container, ...props.style }}>
-            <input onChange={props.setQuery} placeholder="Search..." />
+            <input style={styles.input} onChange={props.setQuery} placeholder="Search..." />
         </div>
     );
 };

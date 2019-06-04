@@ -1,12 +1,20 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import styles from "./styles";
 import SimpleForm from '../../General/SimpleForm';
 
 const EditCard = props => {
 
+	// form data
+	const [formData, setFormData] = useState({});
+	const [saving, setSaving] = useState({
+		saving: false,
+		error: false,
+		complete: false,
+	})
+
 	useEffect(() => {
 		console.log(props.data)
-	}, [])
+	}, []);
 
 	// create data for form
 	const formProperties = Object.keys(props.data).map(key => {
@@ -18,14 +26,55 @@ const EditCard = props => {
 			return (
 				{
 					property: key,
-					type: "text"
+					type: "text",
+					onChange: (e) => {
+						let data = Object.assign({}, formData);
+						data[key] = e.target.value;
+						setFormData(data);
+					}
 				}
 			);
 		} else {
 			return null;
 		}
 	}).filter(val => val !== null);
-	console.log(formProperties)
+
+	// form submit
+	const submitHandler = e => {
+		e.preventDefault();
+		let initStatus = {
+			saving: true,
+			error: false,
+			complete: false,
+		}
+		setSaving(initStatus);
+		fetch(`http://localhost:3008/players/${props.data.id}`, {
+			method: "PATCH",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(formData)
+		}).then(res => {
+			console.log(res)
+			let status = {
+				saving: false,
+				error: false,
+				complete: true,
+			}
+			if (res.status !== 200) {
+				status.error = true;
+			}
+			setSaving(status);
+			setTimeout(() => {
+				let clearStatus = {
+					saving: false,
+					error: false,
+					complete: false,
+				}
+				setSaving(clearStatus)
+			}, 1000);
+		})
+	}
 
     return (
         <div id="edit-card" style={{ ...styles.container, ...props.style }}>
@@ -41,7 +90,25 @@ const EditCard = props => {
 		            <div style={styles.name}>{props.data.name}</div>
 		            <div>{props.team !== null && props.team.name}</div>
 	            </div>
-	            <SimpleForm style={{width: "90%", margin: "0 auto"}} inputs={formProperties || []} />
+		        {saving.saving &&
+		        	<div>
+		        		<h2>Saving...</h2>
+		        	</div>
+
+		        }
+		        {saving.error &&
+		        	<div>
+		        		<h4>Error Saving Update.</h4>
+		        	</div>
+		        }
+		        {saving.complete &&
+		        	<div>
+		        		<h4>Update Saved.</h4>
+		        	</div>
+		        }
+        		{!saving.saving &&
+		            <SimpleForm handleSubmit={submitHandler} style={{width: "90%", margin: "0 auto"}} inputs={formProperties || []} />
+		        }
         	</div>
         </div>
     );
